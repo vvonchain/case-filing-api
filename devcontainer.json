@@ -1,0 +1,25 @@
+{
+  "name": "EvictionCaseFilingAPI",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "api",
+  "workspaceFolder": "/workspace",
+  "extensions": [
+    "ms-dotnettools.csharp",
+    "ms-azure-devops.azure-pipelines",
+    "redhat.vscode-yaml"
+  ],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": "dotnet restore",
+  "forwardPorts": [5000, 5001],
+  "portsAttributes": {
+    "5000": {
+      "protocol": "https"
+    },
+    "5001": {
+      "protocol": "http"
+    }
+  }
+}   

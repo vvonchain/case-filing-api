@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+      - "5001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    depends_on:
+      - mssql
+      - efmapi
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD=YourStrong!Passw0rd
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+  efmapi:
+    image: efmapi:latest
+    ports:
+      - "8000:80"
+    environment:
+      - EFMAPI_ENDPOINT=http://efmapi
+      - EFMAPI_CERTIFICATE_PATH=/certs/efmapi.crt
+      - EFMAPI_CERTIFICATE_PASSWORD=password
+    volumes:
+      - ./certs:/certs:ro
+
+volumes:
+  mssql-data:
