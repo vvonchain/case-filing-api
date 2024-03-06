@@ -1,0 +1,17 @@
+{
+    "caseNumber": "EV-2023-002",
+    "plaintiffName": "ABC Real Estate LLC",
+    "defendantName": "Michael Johnson",
+    "filingDate": "2023-06-05",
+    "propertyAddress": "456 Elm St, Anytown, USA",
+    "complaints": [
+        {
+            "description": "Lease violation",
+            "amount": 0
+        },
+        {
+            "description": "Unauthorized occupants",
+            "amount": 0
+        }
+    ]
+}

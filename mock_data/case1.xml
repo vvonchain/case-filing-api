@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CaseData>
+  <CaseNumber>EV-2023-001</CaseNumber>
+  <PlaintiffName>John Doe</PlaintiffName>
+  <DefendantName>Jane Smith</DefendantName>
+  <FilingDate>2023-06-01</FilingDate>
+  <PropertyAddress>123 Main St, Anytown, USA</PropertyAddress>
+  <CaseStatus>Filed</CaseStatus>
+  <Complaints>
+    <Complaint>
+      <Description>Non-payment of rent</Description>
+      <Amount>1500.00</Amount>
+    </Complaint>
+    <Complaint>
+      <Description>Damage to property</Description>
+      <Amount>500.00</Amount>
+    </Complaint>
+  </Complaints>
+</CaseData>
