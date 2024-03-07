@@ -1,42 +1,29 @@
+using System.Xml.Serialization;
+
 namespace EvictionCaseFilingAPI.Models
 {
+    [XmlRoot("Envelope")]
     public class Envelope
     {
-        // Define properties based on the EFSP guide
-    }
+        [XmlElement("Filing")]
+        public Filing Filing { get; set; }
 
-    public class Filing
-    {
-        // Define properties based on the EFSP guide
-    }
+        [XmlElement("Document")]
+        public Document Document { get; set; }
 
-    public class Document
-    {
-        // Define properties based on the EFSP guide
-    }
+        [XmlElement("User")]
+        public User User { get; set; }
 
-    public class User
-    {
-        // Define properties based on the EFSP guide
-    }
+        [XmlElement("Attorney")]
+        public Attorney Attorney { get; set; }
 
-    public class Attorney
-    {
-        // Define properties based on the EFSP guide
-    }
+        [XmlElement("ServiceContact")]
+        public ServiceContact ServiceContact { get; set; }
 
-    public class ServiceContact
-    {
-        // Define properties based on the EFSP guide
-    }
+        [XmlElement("CaseParty")]
+        public CaseParty CaseParty { get; set; }
 
-    public class CaseParty
-    {
-        // Define properties based on the EFSP guide
-    }
-
-    public class CasePartyAttorney
-    {
-        // Define properties based on the EFSP guide
+        [XmlElement("CasePartyAttorney")]
+        public CasePartyAttorney CasePartyAttorney { get; set; }
     }
 }

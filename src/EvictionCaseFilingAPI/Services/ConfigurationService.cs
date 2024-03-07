@@ -1,33 +1,18 @@
 using System.Threading.Tasks;
-using Serilog;
 
 namespace EvictionCaseFilingAPI.Services
 {
-    public class ConfigurationService
+    public interface IConfigurationService
     {
-        private readonly ILogger _logger;
+        Task<string> GetPolicyAsync();
+    }
 
-        public ConfigurationService(ILogger logger)
+    public class ConfigurationService : IConfigurationService
+    {
+        public async Task<string> GetPolicyAsync()
         {
-            _logger = logger.ForContext<ConfigurationService>();
-        }
-
-        public async Task RetrieveAndCacheSystemConfiguration()
-        {
-            _logger.Information("Retrieving and caching system-wide configuration");
-            // Implement the logic to retrieve and cache system-wide configuration
-        }
-
-        public async Task RetrieveAndCacheCourtConfiguration()
-        {
-            _logger.Information("Retrieving and caching court-specific configuration");
-            // Implement the logic to retrieve and cache court-specific configuration
-        }
-
-        public async Task EnforceDocumentSizeLimits()
-        {
-            _logger.Information("Enforcing document size limits");
-            // Implement the logic to enforce document size limits
+            // TODO: Implement logic to retrieve court-specific configuration
+            return await Task.FromResult("Court policy retrieved successfully");
         }
     }
 }

@@ -1,42 +1,26 @@
-using System.Threading.Tasks;
 using EvictionCaseFilingAPI.Models;
-using Serilog;
+using System.Threading.Tasks;
 
 namespace EvictionCaseFilingAPI.Services
 {
+    public interface IEFilingService
+    {
+        Task<string> SubmitFilingAsync(Envelope envelope);
+        Task<string> UploadDocumentAsync(Document document);
+    }
+
     public class EFilingService : IEFilingService
     {
-        private readonly ILogger _logger;
-
-        public EFilingService(ILogger logger)
+        public async Task<string> SubmitFilingAsync(Envelope envelope)
         {
-            _logger = logger.ForContext<EFilingService>();
+            // TODO: Implement filing submission logic
+            return await Task.FromResult("Filing submitted successfully");
         }
 
-        public async Task NotifyFilingReviewComplete(NotifyFilingReviewCompleteRequest request)
+        public async Task<string> UploadDocumentAsync(Document document)
         {
-            _logger.Information("Processing NotifyFilingReviewComplete request: {@Request}", request);
-            // Implement the logic to handle filing review complete notification
-        }
-
-        public async Task<GetFilingServiceResponse> GetFilingService(GetFilingServiceRequest request)
-        {
-            _logger.Information("Processing GetFilingService request: {@Request}", request);
-            // Implement the logic to retrieve filing service information
-            return new GetFilingServiceResponse();
-        }
-
-        public async Task<GetServiceInformationResponse> GetServiceInformation(GetServiceInformationRequest request)
-        {
-            _logger.Information("Processing GetServiceInformation request: {@Request}", request);
-            // Implement the logic to retrieve service information
-            return new GetServiceInformationResponse();
-        }
-
-        public async Task NotifyServiceComplete(NotifyServiceCompleteRequest request)
-        {
-            _logger.Information("Processing NotifyServiceComplete request: {@Request}", request);
-            // Implement the logic to handle service complete notification
+            // TODO: Implement document upload logic
+            return await Task.FromResult("Document uploaded successfully");
         }
     }
 }

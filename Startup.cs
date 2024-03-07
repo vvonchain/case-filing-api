@@ -1,35 +1,49 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using EvictionCaseFilingAPI.Security;
+using EvictionCaseFilingAPI.Services;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SoapCore;
 
-public class Startup
+namespace EvictionCaseFilingAPI
 {
-    public void ConfigureServices(IServiceCollection services)
+    public class Startup
     {
-        // ... other services ...
+        public IConfiguration Configuration { get; }
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSoapCore();
+            services.AddScoped<IEFilingService, EFilingService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
+            services.AddScoped<IX509CertificateProvider, X509CertificateProvider>();
+            services.AddSingleton<SOAPSignatureHandler>();
+            services.AddControllers();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "your-issuer",
-                    ValidAudience = "your-audience",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
-                };
+                app.UseDeveloperExceptionPage();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.UseSoapEndpoint<IEFilingService>("/eFiling.asmx", new SoapEncoderOptions());
+                endpoints.MapControllers();
             });
-    }
-
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-        // ... other middleware ...
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        // ... other middleware ...
+        }
     }
 }
