@@ -1,17 +1,17 @@
-using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace EvictionCaseFilingAPI.Models
 {
-    [XmlRoot("ServiceContact")]
     public class ServiceContact
     {
-        [XmlElement("ServiceContactID")]
+        [Key]
         public string ServiceContactID { get; set; }
 
-        [XmlElement("Name")]
+        [Required]
         public string Name { get; set; }
 
-        [XmlElement("Email")]
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
     }
 }

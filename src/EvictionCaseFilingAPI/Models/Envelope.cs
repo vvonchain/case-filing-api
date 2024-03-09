@@ -1,4 +1,5 @@
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace EvictionCaseFilingAPI.Models
 {
@@ -8,8 +9,9 @@ namespace EvictionCaseFilingAPI.Models
         [XmlElement("Filing")]
         public Filing Filing { get; set; }
 
-        [XmlElement("Document")]
-        public Document Document { get; set; }
+        [XmlArray("Documents")]
+        [XmlArrayItem("Document")]
+        public List<Document> Documents { get; set; } = new List<Document>();
 
         [XmlElement("User")]
         public User User { get; set; }
@@ -17,13 +19,16 @@ namespace EvictionCaseFilingAPI.Models
         [XmlElement("Attorney")]
         public Attorney Attorney { get; set; }
 
-        [XmlElement("ServiceContact")]
-        public ServiceContact ServiceContact { get; set; }
+        [XmlArray("ServiceContacts")]
+        [XmlArrayItem("ServiceContact")]
+        public List<ServiceContact> ServiceContacts { get; set; } = new List<ServiceContact>();
 
-        [XmlElement("CaseParty")]
-        public CaseParty CaseParty { get; set; }
+        [XmlArray("CaseParties")]
+        [XmlArrayItem("CaseParty")]
+        public List<CaseParty> CaseParties { get; set; } = new List<CaseParty>();
 
-        [XmlElement("CasePartyAttorney")]
-        public CasePartyAttorney CasePartyAttorney { get; set; }
+        [XmlArray("CasePartyAttorneys")]
+        [XmlArrayItem("CasePartyAttorney")]
+        public List<CasePartyAttorney> CasePartyAttorneys { get; set; } = new List<CasePartyAttorney>();
     }
 }

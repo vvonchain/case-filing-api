@@ -1,7 +1,11 @@
 using EvictionCaseFilingAPI.Services;
 using System;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.Xml;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Dispatcher;
 using System.Xml;
 
 namespace EvictionCaseFilingAPI.Security
@@ -17,26 +21,48 @@ namespace EvictionCaseFilingAPI.Security
 
         public void AfterReceiveReply(ref Message reply, object correlationState)
         {
-            // TODO: Implement response message validation logic
+            // Implementation of response message validation logic can be added here
         }
 
         public object BeforeSendRequest(ref Message request, IClientChannel channel)
         {
-            var document = new XmlDocument();
-            document.LoadXml(request.ToString());
+            // Convert the request message to a XmlDocument
+            var document = new XmlDocument { PreserveWhitespace = true };
+            using (var reader = request.GetReaderAtBodyContents())
+            {
+                document.Load(reader);
+            }
 
-            var signedXml = new SignedXml(document);
-            signedXml.SigningKey = _certificateProvider.GetCertificate().PrivateKey;
+            // Create a SignedXml object and assign a new RSA key to it
+            SignedXml signedXml = new SignedXml(document)
+            {
+                SigningKey = _certificateProvider.GetCertificate().GetRSAPrivateKey()
+            };
 
-            var reference = new Reference();
-            reference.Uri = "";
+            // Create a reference to be signed
+            Reference reference = new Reference
+            {
+                Uri = ""
+            };
+
+            // Add an enveloped transformation to the reference
             reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
             signedXml.AddReference(reference);
 
+            // Add the key information
+            KeyInfo keyInfo = new KeyInfo();
+            keyInfo.AddClause(new KeyInfoX509Data(_certificateProvider.GetCertificate()));
+            signedXml.KeyInfo = keyInfo;
+
+            // Compute the signature
             signedXml.ComputeSignature();
-            var xmlDigitalSignature = signedXml.GetXml();
-            var header = new MessageHeader<XmlElement>(xmlDigitalSignature);
-            request.Headers.Add(header);
+
+            // Get the XML representation of the signature and save it to an XmlElement object
+            XmlElement xmlDigitalSignature = signedXml.GetXml();
+
+            // Add the signature as a SOAP header to the outgoing request
+            MessageHeader signatureHeader = MessageHeader.CreateHeader("Signature", "", xmlDigitalSignature);
+            request.Headers.Add(signatureHeader);
 
             return null;
         }

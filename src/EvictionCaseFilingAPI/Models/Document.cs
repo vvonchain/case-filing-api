@@ -1,17 +1,20 @@
-using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EvictionCaseFilingAPI.Models
 {
-    [XmlRoot("Document")]
     public class Document
     {
-        [XmlElement("DocumentID")]
+        [Key]
+        [JsonPropertyName("documentId")]
         public string DocumentID { get; set; }
 
-        [XmlElement("DocumentType")]
+        [Required]
+        [JsonPropertyName("documentType")]
         public string DocumentType { get; set; }
 
-        [XmlElement("DocumentData")]
+        [Required]
+        [JsonPropertyName("documentData")]
         public byte[] DocumentData { get; set; }
     }
 }

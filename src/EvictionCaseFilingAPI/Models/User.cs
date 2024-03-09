@@ -1,14 +1,14 @@
-using System.Xml.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace EvictionCaseFilingAPI.Models
 {
-    [XmlRoot("User")]
     public class User
     {
-        [XmlElement("UserID")]
+        [Key]
         public string UserID { get; set; }
 
-        [XmlElement("Email")]
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
     }
 }

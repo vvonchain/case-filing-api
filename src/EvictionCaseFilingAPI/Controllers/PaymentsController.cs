@@ -1,6 +1,7 @@
 using EvictionCaseFilingAPI.Models;
 using EvictionCaseFilingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace EvictionCaseFilingAPI.Controllers
@@ -19,8 +20,19 @@ namespace EvictionCaseFilingAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> ProcessPayment([FromBody] Payment payment)
         {
-            var result = await _paymentService.ProcessPaymentAsync(payment);
-            return Ok(result);
+            try
+            {
+                var result = await _paymentService.ProcessPaymentAsync(payment);
+                if (result == null)
+                {
+                    return NotFound("Payment processing failed.");
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using EvictionCaseFilingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace EvictionCaseFilingAPI.Controllers
@@ -18,8 +19,19 @@ namespace EvictionCaseFilingAPI.Controllers
         [HttpGet("policy")]
         public async Task<IActionResult> GetPolicy()
         {
-            var policy = await _configurationService.GetPolicyAsync();
-            return Ok(policy);
+            try
+            {
+                var policy = await _configurationService.GetPolicyAsync();
+                if (policy == null)
+                {
+                    return NotFound("Policy not found.");
+                }
+                return Ok(policy);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
